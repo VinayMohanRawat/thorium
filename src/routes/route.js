@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 
@@ -51,10 +52,10 @@ router.post("/test-post-2", function (req, res) {
 })
 
 router.post("/test-post-3", function (req, res) {
-    // let id = req.body.user
-    // let pwd= req.body.password
+    let id = req.body.user
+    let pwd= req.body.password
 
-    // console.log( id , pwd)
+    console.log( id , pwd)
 
     console.log(req.body)
 
@@ -80,11 +81,11 @@ router.get("/get-query-1", function (req, res) {
 router.get("/get-query-2", function (req, res) {
     let marks = req.query.marks
     // { marks: '80'}
-
-    let result = marks > 40 ? "pass" : "fail"
-    // let result = "fail"
-    // if (marks> 40) { result = "pass" }
-    // // else { result = "fail" }
+   
+    //   let result = marks > 40 ? "pass" : "fail"
+    let result = "fail"
+    if (marks> 40) { result = "pass" }
+    // else { result = "fail" }
 
     res.send({ result: result, status: true })
 })
@@ -96,7 +97,7 @@ router.post("/post-query-1", function (req, res) {
     res.send({ result: data, status: true })
 })
 
-let myArr = [23, 45, 67, 281394, 32424, 423, 24, 42323, 4, 234, 12, 34]
+// let myArr = [23, 45, 67, 281394, 32424, 423, 24, 42323, 4, 234, 12, 34]
 //filter out all the numbers that are greater than input( input is received from query params)
 router.post("/post-query-2", function (req, res) {
     //CODE HERE
@@ -116,36 +117,54 @@ router.post("/post-query-2", function (req, res) {
 // also return an array consisting of only the person that can vote
 
 //  take this as sample for array of persons:
-// let persons= [
-//     {
-//     name: "PK",
-//     age: 10,
-//     votingStatus: false
-// },
-// {
-//     name: "SK",
-//     age: 20,
-//     votingStatus: false
-// },
-// {
-//     name: "AA",
-//     age: 70,
-//     votingStatus: false
-// },
-// {
-//     name: "SC",
-//     age: 5,
-//     votingStatus: false
-// },
-// {
-//     name: "HO",
-//     age: 40,
-//     votingStatus: false
-// }
-// ]
+let persons= [
+    {
+    name: "PK",
+    age: 10,
+    votingStatus: false
+},
+{
+    name: "SK",
+    age: 20,
+    votingStatus: false
+},
+{
+    name: "AA",
+    age: 70,
+    votingStatus: false
+},
+{
+    name: "SC",
+    age: 5,
+    votingStatus: false
+},
+{
+    name: "HO",
+    age: 40,
+    votingStatus: false
+}
+]
 
+
+router.get("/votingAge", function(req, res){
+    let votingAge = req.query.age 
+    console.log(votingAge);
+
+    for (i=0;i<persons.length;i++){
+        if(persons[i].age > votingAge){
+            persons[i].votingStatus = true ;
+        }
+        
+    }
+    let change = persons
+
+    res.send({ votingStatus : change, status: true })
+});
 
 
 
 
 module.exports = router;
+
+
+
