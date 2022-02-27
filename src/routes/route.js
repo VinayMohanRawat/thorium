@@ -59,28 +59,26 @@ router.get('/films/:filmId', function(req,res){
         "name": "M.S. Dhoni: The Untold Story"
        }]
 
-       const filmId = req.params.movieId
-       let found = false;
-       for(let i=0; i<films.length;i++){
-           if(films[i].id == filmId){
-               found = true
-               res.send(films[i])
-           }
-       }
+       const filmId = req.params.filmId
+    //    let found = false;
+    //    for(let i=0; i<films.length;i++){
+    //        if(films[i].id == filmId){
+    //            found = true
+    //            res.send(films[i])
+    //        }
+    //    }
 
+        console.log(filmId)
 
-    // Why This Is Not Happen ? 
-    //    for(let i=0; i<films.length; i++)
-    //       if(films[i].id === filmId){
-    //        res.send(films[movieId].name)
-    //       } else {
-    //           res.send('No movie exists with this id')
-    //          } 
-            
-       
+       for(let i=0; i<films.length; i++) {
+          if(films[i].id == filmId){
+           res.send(films[i].name)
+           return 
+          } 
+        }
+        
+        res.send('No movie exists with this id')
+        
 });
-
-
-
 
 module.exports = router;
