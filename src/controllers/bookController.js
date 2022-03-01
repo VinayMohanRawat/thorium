@@ -16,7 +16,7 @@ const bookList= async function (req, res) {
 
 const getBooksInYear = async function (req, res) {
     let data= req.query.year
-    console.log(data)
+    // console.log(data)
 
     let getBooksInYear = await BookModel.find({year : data}).select({bookName:1, year:1, _id:0})
     res.send({msg: getBooksInYear})
@@ -26,11 +26,14 @@ const getParticularBooks = async function (req, res) {
     let data= req.body
     // console.log(data)
 
-    let  getParticularBooks = await BookModel.find( {
+    let  getParticularBooks = await BookModel.find(data).select({bookName:1, _id:0})
+         if(getParticularBooks.length===0)
+         res.send({msg:"Not Found Data"})
+
+
         
-       $or: [{ authorName : data.authorName },{bookName : data.bookName}, {year : data.year}, {prices: data.prices}, {stockAvailable : data.stockAvailable} ] 
+    //    $or: [{ authorName : data.authorName },{bookName : data.bookName}, {year : data.year}, {prices: data.prices}, {stockAvailable : data.stockAvailable} ] 
         
-     } )
     res.send({msg: getParticularBooks})
 }
 
