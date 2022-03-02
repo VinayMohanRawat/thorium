@@ -19,6 +19,7 @@ const bookSchema = new mongoose.Schema( {
         // "ch3" : "intro to db"
     //  }
     summary :  mongoose.Schema.Types.Mixed,
+    
     isDeleted: Boolean //true on book deletion i.e you flag the document/data as isDeleted: true..(mark "dirty")
 
 }, { timestamps: true });
