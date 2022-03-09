@@ -1,14 +1,12 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
-const createUser = async function (abcd, xyz) {
-  //You can name the req, res objects anything.
-  //but the first parameter is always the request 
-  //the second parameter is always the response
-  let data = abcd.body;
+
+const createUser = async function (req, res) {
+  
+  let data = req.body;
   let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
+  res.send({ msg: savedData });
 };
 
 const loginUser = async function (req, res) {
@@ -35,14 +33,9 @@ const loginUser = async function (req, res) {
 };     
 
 const getUserData = async function (req, res) {
-  let token = req.headers["x-Auth-token"];
-  if (!token) token = req.headers["x-auth-token"];
-
   
-  if (!token) return res.send({ status: false, msg: "token must be present" });
-
+  let token = req.headers["x-auth-token"]
   console.log(token)
-  
  
   let decodedToken = jwt.verify(token, "functionup-thorium");
 
@@ -73,11 +66,36 @@ const updateUser = async function (req, res) {
 };
 
 const deleteUser = async function(req, res){
-  let userData = req.params.userId ;
+
+   let userData = req.params.userId ;
   let selectData =await userModel.findOneAndUpdate({_id:userData}, {$set:{isDeleted:true}},{new : true});
   res.send({status:selectData})
 
 };
+
+const postMessage = async function(req,res){
+  let id = req.params.userId
+  let message = req.body.message
+
+  let token = req.headers["x-auth-token"]
+
+  let decordedToken = jwt.verify(token,"functionup-thorium")
+
+  let userLoggedIn = decordedToken.userId
+  console.log(decordedToken)
+  
+  if(id !== userLoggedIn) 
+  {
+    return res.send({Error:"Given userId is not matching with logged userId"}) 
+  }
+
+  let user = await userModel.findById(id)
+  let updatedPosts = user.post
+  updatedPosts.push(message)
+  let updatedUser = await userModel.findByIdAndUpdate( {_id:user._id}, {post:updatedPosts}, {new:true} )
+  return res.send({status:true, data: updatedUser})
+
+}
 
 
 module.exports.createUser = createUser;
@@ -85,3 +103,4 @@ module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
 module.exports.deleteUser = deleteUser;
+module.exports.postMessage = postMessage;
