@@ -32,38 +32,67 @@ const loginUser = async function (req, res) {
   res.send({ status: true, data: token });
 };     
 
+
 const getUserData = async function (req, res) {
   
+  let userId = req.params.userId;
+
   let token = req.headers["x-auth-token"]
-  console.log(token)
+  // console.log(token)
  
   let decodedToken = jwt.verify(token, "functionup-thorium");
 
-  if (!decodedToken)
-    return res.send({ status: false, msg: "token is invalid" });
+  if (!decodedToken) 
+  {
+  return res.send({ status: false, msg: "token is invalid" });
+  }
 
-  let userId = req.params.userId;
+  let userLoggedIn = decodedToken.userId 
+
+ 
+  
+  if(userId !== userLoggedIn)
+   {
+    return res.send({Error:"Given userId is not matching with loggedIn userId"})
+    }
+  
   let userDetails = await userModel.findById(userId);
-  if (!userDetails)
+  if (!userDetails) {
     return res.send({ status: false, msg: "No such user exists" });
-
+  }
   res.send({ status: true, data: userDetails });
 };
+
 
 const updateUser = async function (req, res) {
 
 
-  let userId = req.params.userId;
-  let user = await userModel.findById(userId);
+let userId = req.params.userId;
+
+let decordedToken = jwt.verify(token,"function-thorium")
+
+let loggedIn = decordedToken.userId
+
+if(!decordedToken){
+  return res.send({Error:"JWTToken is not matching"})
+}
+
+if(!userId == loggedIn){
+  return res.send({ERROR:"Given userId is not matching with loggedIn userId"})
+}
+
+
+let user = await userModel.findById(userId);
  
   if (!user) {
     return res.send("No such user exists");
   }
 
-  let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
+let userData = req.body;
+let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
   res.send({ status: updatedUser, data: updatedUser });
 };
+
 
 const deleteUser = async function(req, res){
 
