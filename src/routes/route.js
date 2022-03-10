@@ -13,7 +13,7 @@ router.post("/users", userController.createUser  )
 router.post("/login", userController.loginUser)
 
 
-router.get("/users/:userId", middleWare.authentication, userController.getUserData)
+router.get("/users/:userId", middleWare.authentication , userController.getUserData)
 
 router.put("/users/:userId", middleWare.authentication,userController.updateUser)
 

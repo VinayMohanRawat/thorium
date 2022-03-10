@@ -1,4 +1,4 @@
-
+const jwt = require("jsonwebtoken")
 
 const authentication = function (req,res,next){
 
@@ -8,16 +8,17 @@ const authentication = function (req,res,next){
 
     if (!token) return res.send({ status: false, msg: "token must be present" });
 
-   
-    // let decordedToken = jwt.verify(token,"functionup-thorium")
-
-    // let userLoggedIn = decordedToken.userId
+    
+    let decordedToken = jwt.verify(token,"functionup-thorium")
+    
+    let userLoggedIn = decordedToken.userId
+    
+    let userId = req.params.userId;
   
-  
-    // if(id !== userLoggedIn) 
-    // {
-    //     return res.send({Error:"Given userId is not matching with logged userId"}) 
-    // }
+    if(userId !== userLoggedIn) 
+    {
+        return res.send({Error:"Given userId is not matching with logged userId"}) 
+    }
     
     next()
 
